@@ -1,0 +1,99 @@
+Create Database MySecondDB
+
+--Drop the second database
+Drop Database MySecondDB
+---------------------
+--1 - Create a Table
+
+Use MrFirstDB
+Create Table StudentInfo
+(
+StudentID int Identity(1, 1),
+StudentName nvarchar(50)
+)
+
+--auto increment--
+--StudentID int Identity(seed_value, increment_value)
+--StudentID int Identity(1000, 1) ==> 1000, 1001, 1002
+--StudentID int Identity(1000, 2) ==> 1000, 1002, 1004
+
+Select * from StudentInfo
+
+--Inert values into table
+Insert into StudentInfo(StudentName)
+values ( 'Student1 ')
+
+--Insert a second value into table
+Insert into StudentInfo(StudentName)
+values ('student2')
+
+--Insert a third value into table
+Insert into StudentInfo(StudentName)
+values ('student3')
+
+Select * from [dbo].[StudentInfo]
+
+--Set as Single User Mode
+Use master
+Go
+      Alter Database MyFirstDB Set Single_User With Rollback Immediate
+Go
+
+--Create a 2nd Database--
+Use MyFirstDB
+Create Table StudentInfo
+(
+StudentID int Identity(1, 1),
+StudentName nvarchar(50)
+)
+
+Select * from StudentInfo2
+--Set it back to multi-user mode
+Use master
+Go
+	Alter Database MyFirstDB Set Multi_User
+Go
+--Create Table Employee
+Use MyFirstDB
+Create Table Employee
+(
+	EmployeeID int Identity (100, 1), 
+	EmployeeName varchar (50),
+	Street nvarchar(50),
+	city char (10)
+)
+Select * from Employee
+--2- difference between varchar and char
+--Insert values
+
+Insert into Employee(EmployeeName, Street, City)
+values( 'Jane','Stelton', 'Edison' )
+
+Select * from Employee
+Insert into Employee(EmployeeName, Street, City)
+values( 'John', 'Centennial', 'Edison' )
+
+Insert into Employee(EmployeeName, Street, City)
+values ('Frank','Oak', 'Woodbridge')
+
+Insert into Employee(EmployeeName, Street, City)
+values ('David', 'Wood', 'Piscataway')
+
+--ALTER TABLES
+--LAB3- ADD NEW COLUMN
+Alter table Employee Add Phone char(10)
+
+Select * from Employee
+--4 -CHANGE DATATYPE OF AN EXISTING COLUMN
+Alter Table Employee Alter Column Phone int
+
+---DROP COLUMN
+Alter Table Employee Drop Column Phone
+
+Select * from Employee
+
+--6- RENAMING COLUMNS
+Exec sp_rename 'Employee.City', 'Township', 'Column'
+
+--7 Renaming Tables
+Exec sp_name Employee, NewEmployee
